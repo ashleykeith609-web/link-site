@@ -1,2 +1,144 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
+export default function ImageSlider() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
+
+  const slides = [
+    {
+      id: 1,
+      image: "/porject32.jpg",
+      alt: "Project 32"
+    },
+    {
+      id: 2,
+      image: "/porject33.jpg",
+      alt: "Project 33"
+    },
+    {
+      id: 3,
+      image: "/porject34.jpg",
+      alt: "Project 34"
+    },
+    {
+      id: 4,
+      image: "/porject35.jpg",
+      alt: "Project 35"
+    },
+    {
+      id: 5,
+      image: "/porject36.jpg",
+      alt: "Project 36"
+    },
+    {
+      id: 6,
+      image: "/porject37.jpg",
+      alt: "Project 37"
+    },
+    {
+      id: 7,
+      image: "/porject38.jpg",
+      alt: "Project 38"
+    }
+  ];
+
+  const goToPrevious = () => {
+    setDirection(-1);
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? slides.length - 1 : prevIndex - 1
+    );
+  };
+
+  const goToNext = () => {
+    setDirection(1);
+    setCurrentIndex((prevIndex) =>
+      prevIndex === slides.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  const variants = {
+    enter: (direction) => ({
+      x: direction > 0 ? 1000 : -1000,
+      opacity: 0
+    }),
+    center: {
+      x: 0,
+      opacity: 1
+    },
+    exit: (direction) => ({
+      x: direction > 0 ? -1000 : 1000,
+      opacity: 0
+    })
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-8">
+      <div className="w-full max-w-4xl">
+        {/* Slider Container */}
+        <div className="relative w-full aspect-[16/9] bg-white rounded-2xl shadow-xl overflow-hidden">
+          <AnimatePresence initial={false} custom={direction}>
+            <motion.div
+              key={currentIndex}
+              custom={direction}
+              variants={variants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{
+                x: { type: "spring", stiffness: 80, damping: 25 },
+                opacity: { duration: 0.8 }
+              }}
+              className="absolute inset-0"
+            >
+              <img
+                src={slides[currentIndex].image}
+                alt={slides[currentIndex].alt}
+                className="w-full h-full object-cover"
+              />
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Navigation Buttons */}
+          <button
+            onClick={goToPrevious}
+            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-3 shadow-lg transition-all hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            aria-label="Previous slide"
+          >
+            <ChevronLeft className="w-6 h-6 text-gray-800" />
+          </button>
+
+          <button
+            onClick={goToNext}
+            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-3 shadow-lg transition-all hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            aria-label="Next slide"
+          >
+            <ChevronRight className="w-6 h-6 text-gray-800" />
+          </button>
+        </div>
+
+        {/* Dots Indicator */}
+        <div className="flex justify-center gap-2 mt-6">
+          {slides.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => {
+                setDirection(index > currentIndex ? 1 : -1);
+                setCurrentIndex(index);
+              }}
+              className={`h-2 rounded-full transition-all ${
+                index === currentIndex 
+                  ? 'w-8 bg-blue-600' 
+                  : 'w-2 bg-gray-300 hover:bg-gray-400'
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -11,14 +11,6 @@ index.html
   </body>
 </html>
 
-echo "# link-site" >> README.md
-git init
-git add README.md
-git commit -m "first commit"
-git branch -M main
-git remote add origin https://github.com/ashleykeith609-web/legendary-portfollio.git
-git push -u origin main
-
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
